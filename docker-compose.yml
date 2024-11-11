@@ -1,0 +1,44 @@
+version: "3.11"
+
+services:
+    postgres:
+        env_file:
+            - .env
+        image: postgres:16.4
+        restart: unless-stopped
+        container_name: postgres
+        environment:
+            POSTGRES_DB: ${PGDATABASE}
+            POSTGRES_USER: ${PGUSER}
+            POSTGRES_PASSWORD: ${PGPASSWORD}
+        ports:
+            - "${PGPORT}:${PGPORT}"
+        volumes:
+            - ../dev_postgres:/var/lib/postgresql/data
+    api:
+        env_file:
+            - .env
+        build:
+            context: ./
+            dockerfile: Dockerfile
+            target: development
+        container_name: api
+        depends_on:
+            - postgres
+        volumes:
+            - ./:/app
+            - /app/node_modules
+        environment:
+            NODE_ENV: development
+            CHOKIDAR_USEPOLLING: "true"
+            CHOKIDAR_INTERVAL: 1000
+            PGHOST: ${PGHOST}
+            PGUSER: ${PGUSER}
+            PGPASSWORD: ${PGPASSWORD}
+            PGDATABASE: ${PGDATABASE}
+            PGPORT: ${PGPORT}
+            WB_API_TOKEN: ${WB_API_TOKEN}
+            GOOGLE_API_OAUTH_JSON: ${GOOGLE_API_OAUTH_JSON}
+            API_PORT: ${API_PORT}
+        ports:
+            - "${API_PORT}:${API_PORT}"
