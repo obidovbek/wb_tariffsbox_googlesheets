@@ -32,7 +32,7 @@ PGPASSWORD=ваш_пароль
 PGDATABASE=mydatabase
 PGPORT=5432
 WB_API_TOKEN=ваш_токен
-GOOGLE_API_OAUTH_JSON=./credentials/***.json
+GOOGLE_API_OAUTH_JSON=***.json
 ```
 
 ## Запуск с помощью Docker
